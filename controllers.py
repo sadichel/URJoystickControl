@@ -4,27 +4,30 @@ Standard controller mappings.
 
 """
 
+
 class Controller:
+    def get_axis(self, *axes):
+        for axis in axes:
+            if self.axis.get(axis) != None:
+                return self.axis.get(axis)
+        return None
 
-    def get_axis(self, axis):
-        return self.axis.get(axis)
+    def get_button(self, *buttons):
+        for button in buttons:
+            if self.button.get(button) != None:
+                return self.button.get(button)
+        return None
 
-    def get_button(self, button):
-        return self.button.get(button)
 
 class LogitechF710(Controller):
-
-    fullName = 'Logitech F710 Controller'
-
     def __init__(self):
-        
         self.axis = {
-            0 : 'LEFT-X',
-            1 : 'LEFT-Y',
-            2 : 'LT',
-            3 : 'RIGHT-X',
-            4 : 'RIGHT-Y',
-            5 : 'RT',
+            0: 'LEFT-X',
+            1: 'LEFT-Y',
+            2: 'LT',
+            3: 'RIGHT-X',
+            4: 'RIGHT-Y',
+            5: 'RT',
             'LEFT-X': 0,
             'LEFT-Y': 1,
             'LT': 2,
@@ -33,17 +36,17 @@ class LogitechF710(Controller):
             'RT': 5
         }
         self.button = {
-            0 : 'A',
-            1 : 'B',
-            2 : 'X',
-            3 : 'Y',
-            4 : 'LB',
-            5 : 'RB',
-            6 : 'BACK',
-            7 : 'START',
-            8 : 'LOGITECH',
-            9 : 'L3',
-            10 : 'R3',
+            0: 'A',
+            1: 'B',
+            2: 'X',
+            3: 'Y',
+            4: 'LB',
+            5: 'RB',
+            6: 'BACK',
+            7: 'START',
+            8: 'LOGITECH',
+            9: 'L3',
+            10: 'R3',
             'A': 0,
             'B': 1,
             'X': 2,
@@ -57,35 +60,32 @@ class LogitechF710(Controller):
             'R3': 10
         }
 
-class LogitechRumblePad2(Controller):
 
-    fullname = 'Logitech Cordless RumblePad 2'
-
+class LogitechRumblePad(Controller):
     def __init__(self):
-
         self.axis = {
-            0 : 'LEFT-X',
-            1 : 'LEFT-Y',
-            2 : 'RIGHT-X',
-            3 : 'RIGHT-Y',
+            0: 'LEFT-X',
+            1: 'LEFT-Y',
+            2: 'RIGHT-X',
+            3: 'RIGHT-Y',
             'LEFT-X': 0,
             'LEFT-Y': 1,
             'RIGHT-X': 2,
             'RIGHT-Y': 3,
         }
         self.button = {
-            0 : 'X',
-            1 : 'A',
-            2 : 'B',
-            3 : 'Y',
-            4 : 'LB',
-            5 : 'RB',
-            6 : 'LT',
-            7 : 'RT',
-            8 : 'BACK',
-            9 : 'START',
-            10 : 'L3',
-            11 : 'R3',
+            0: 'X',
+            1: 'A',
+            2: 'B',
+            3: 'Y',
+            4: 'LB',
+            5: 'RB',
+            6: 'LT',
+            7: 'RT',
+            8: 'BACK',
+            9: 'START',
+            10: 'L3',
+            11: 'R3',
             'A': 0,
             'B': 1,
             'X': 2,
@@ -100,12 +100,9 @@ class LogitechRumblePad2(Controller):
             'R3': 11
         }
 
+
 class PS3(Controller):
-
-    fullName = 'PlayStation 3 controller'
-
     def __init__(self):
-
         self.axis = {
             0: 'LEFT-X',
             1: 'LEFT-Y',
@@ -159,12 +156,8 @@ class PS3(Controller):
 
 
 class PS4(Controller):
-
-    fullName = 'PlayStation 4 controller'
-
     def __init__(self):
-
-        self.axes = {
+        self.axis = {
             0: 'LEFT-X',
             1: 'LEFT-Y',
             2: 'L2',
@@ -182,8 +175,7 @@ class PS4(Controller):
             'DPAD-X': 6,
             'DPAD-Y': 7,
         }
-
-        self.buttons = {
+        self.button = {
             0:  'CROSS',
             1:  'CIRCLE',
             2:  'TRIANGLE',
@@ -212,12 +204,9 @@ class PS4(Controller):
             'R3': 12
         }
 
-class Xbox360(Controller):
 
-    fullName = 'Xbox 360 controller'
-
+class XBox360(Controller):
     def __init__(self):
-
         self.axis = {
             0: 'LEFT-X',
             1: 'LEFT-Y',
@@ -258,12 +247,13 @@ class Xbox360(Controller):
         }
 
 
-class JOYSTICKS:
-
-    AVAILABLE_JOYSTICKS = {
-        "Logitech F710 Controller" : LogitechF710,
-        "Playstation 3 Controller" : PS3,
-        "Playstation 4 Controller" : PS4,
-        'Xbox 360 Controller' : Xbox360
-            
+class CONTROLLERS:
+    pads = {
+        'ps3': PS3,
+        'ps4': PS4,
+        'xbox': XBox360,
+        'f310': LogitechF710,
+        'f710': LogitechF710,
+        'rumblepad1': LogitechRumblePad,
+        'rumblepad2': LogitechRumblePad
     }
