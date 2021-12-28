@@ -25,35 +25,38 @@ except Exception as e:
     print(e)
     quit()
 
+# robot_ip = '192.168.3.158'
+robot_ip = 'localhost'
 
-# rtde_r = RTDEReceiveInterface('192.168.3.158')
-# rtde_c = RTDEControlInterface('192.168.3.158')
-
-rtde_r = RTDEReceiveInterface('localhost')
-rtde_c = RTDEControlInterface('localhost')
+rtde_r = RTDEReceiveInterface(robot_ip)
+rtde_c = RTDEControlInterface(robot_ip)
 
 print('Connection Established with Univeral Robot')
 
+# urscript parameters
 acceleration = 0.5
 velocity = 0.25
 dt = 1.0/500  # 500Hz transmission rate
 lookahead_time = 0.1
 gain = 300
-delta = 0.00025
-theta = delta * 2*math.pi
 
+# move steps
+delta = 0.00025 # step per moves --> x y and z
+theta = delta * 2*math.pi # step per moves --> roll, pitch and yaw
 max_delta = 0.001
-max_theta = 0.001
-rate = 0.00005
+max_theta = 0.001 * 2*math.pi
+rate = 0.00005 # step per increase
 
 # Move Robot to home position.
 home_position = [-1.54 + math.pi, -1.83, -2.28, -0.59, 1.60, 0.023]
 rtde_c.moveJ(home_position)
 
-# Initialize the analogsticks controlling protocol for the joystick.
-# Right and Left analogstick.
+# Initialize analogsticks control parameters.
+# Right and Left analogstick [0:3], [3:6].
 analogR = AnalogStickHandler()
 analogL = AnalogStickHandler(offset=3, axis=['+Y', '+X', '-Y', '-X'])
+analogR.max_delta = max_delta
+analogL.max_delta = max_theta
 
 analogs = [analogR, analogL]
 
@@ -71,7 +74,6 @@ print(vector)
 is_movable = False
 start_ctrl = False
 
-
 while True:
     start = time.perf_counter()
     for event in pygame.event.get():
@@ -84,10 +86,12 @@ while True:
             if button == 'R3':
                 # Rotate the directions analogR axis controls.
                 analogR.rotate_axis()
+                print_logs(analogs)
 
             if button == 'L3':
                 # Rotate the directions analogL axis controls.
                 analogL.rotate_axis()
+                print_logs(analogs)
 
             if button in ['SELECT', 'BACK']:
                 # Switch mode: Cartesion-space to joint-space & vis-visa.
@@ -104,7 +108,12 @@ while True:
 
             if button in ['DPAD-UP', 'DPAD-DOWN']:
                 hat = 1 if button in ['DPAD-UP'] else -1
-                increament_move_steps(analogR, analogL, hat, rate, max_delta)
+                increament_move_steps(analogR, analogs, hat, rate)
+
+            if button in ['DPAD-LEFT', 'DPAD-RIGHT']:
+                hat = 1 if button in ['DPAD-RIGHT'] else -1
+                increament_move_steps(analogL, analogs, hat, rate)
+
 
         if event.type == pygame.JOYAXISMOTION:  # start guide
             if not start_ctrl:
@@ -112,10 +121,10 @@ while True:
                 start_ctrl = True
 
         if event.type == pygame.JOYHATMOTION:
-            hat = event.value[1]
-            increament_move_steps(analogR, analogL, hat, rate, max_delta)
-            
-            
+            if hat := event.value[0]:
+                increament_move_steps(analogL, analogs, hat, rate)
+            if hat := event.value[1]:
+                increament_move_steps(analogR, analogs, hat, rate)
 
     is_movable = move_robot_command(
         joystick, controller, analogs, vector, funct[0])

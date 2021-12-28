@@ -14,15 +14,16 @@ with open('robot_config.yaml') as file:
 
 
 class AnalogStickHandler:
-    def __init__(self, delta=0, offset=0, axis=['-X', '+Y', '+X', '-Y']):
+    def __init__(self, delta=0, max_delta=0,offset=0, axis=['-X','+Y','+X','-Y']):
         self.delta = delta
+        self.max_delta = max_delta
         self.offset = offset
         self.axis = axis
         self.default_axis = axis
 
     def rotate_axis(self, rotation='clockwise'):
         # Rotate axis config
-        # clockwise --> ['-X', '+Y', '+X', '-Y'] -> ['-Y', '-X', '+Y', '+X']
+        # clockwise: ['-X','+Y','+X','-Y'] -> ['-Y','-X','+Y','+X']
         if rotation == 'clockwise':
             self.axis = [self.axis[-1], *self.axis[0:3]]
         if rotation == 'anticlockwise':
@@ -76,7 +77,7 @@ def limit_tcp(vector, idx, delta, cfg=[displacement_sq, mount_surf, base_length]
     max_reachable = current_max_dsq <= max_dsq
 
     #  Robot mount surface boundaries (rectangle)
-    # [x_min, x_max, y_min, y_max, z_min, _] ->
+    # [x_min, x_max, y_min, y_max, z_min] ->
     (x_min, x_max, y_min, y_max, z_min) = mount_surf
 
     # Check boundaries of the mount surface: collision
@@ -142,23 +143,22 @@ def change_robot_mode(receiver, mode='Cartesian'):
         return receiver.getActualQ()
 
 
-def increament_move_steps(analogR, analogL,hat, rate, max_delta):
-    if not hat: return
-    
-    delta = analogR.delta + hat*rate
-    if  analogR.delta > delta or delta <= max_delta:
-        analogR.delta += hat*rate
-
-    delta = analogL.delta + hat*rate
-    if analogL.delta > delta or delta <= max_delta:
-        analogL.delta += hat*rate
-
+def print_logs(analogs):
     os.system('cls||clear')
+    analogR, analogL = analogs
+    dt = analogL.max_delta, analogR.max_delta
+    print(f'L Analogstick: {analogL.delta:.5f} of {dt[0]:.5f}\n\n{analogL}')
+    print(f'R Analogstick: {analogR.delta:.5f} of {dt[1]:.5f}\n\n{analogR}')
 
-    print(f'L Analogstick: {analogL.delta:.5f}\n\n{analogL}')
-    print(f'R Analogstick: {analogR.delta:.5f}\n\n{analogR}')
 
+def increament_move_steps(analog, analogs, hat, rate):
+    if not hat: return
+    max_delta = analog.max_delta
+    dt = round(analog.delta + hat*rate, 5)
+    if (dt <= max_delta and dt > 0) or abs(dt) <= analog.delta:
+        analog.delta += round(hat*rate, 5)
 
+    print_logs(analogs)
 
 
 def move_robot_command(joystick, controller, sticks, vector, F, noise=0.4):

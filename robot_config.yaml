@@ -5,16 +5,12 @@ use_safety: False
 # maximum displacement of the robot tcp from the robot point of origin
 # min and max displacement^2 of robot tcp from tcp point of origin (xyz).
 # considering xy and xyz for min and max displacement respectively.
-
 displacement_sq: [0.05, 0.3]
 
 # xyz coordinate defining the boundaries of the rectangular surface 
 # where the robot is mounted with respect to the robot tcp point of origin
 # -> [x_min, x_max, y_min, y_max, z_min]
-
-# mount flag
-mount: True
-mount_surf: [-0.25, 0.25, -0.25, 0.25, 0.023]
+mount_surf: [0, 0, 0, 0, 0]
 
 # Robot base length
 base_length: 0.152 # UR3
