@@ -37,19 +37,19 @@ The maximum rotation of the robot joint given from the universal robot specifica
 
 * TCP limit <br />
 To prevent the robot TCP from exceeding its reach which is defined by an equation of a sphere whose displacement from the center is not greater than the the maximum radius given by the robot specification (eg. UR3 max radius = 500mm). <br />
-Control the robot (cartesian) to the maximum reach in either of the axes (x, y or z) and record the value of x, y and z on the teach pendent or ursim and sum their squares (max_dsq = x^2 + y^2 + z^2) as show in fig[A]. <br />
+Control the robot (cartesian) to the maximum reach in either of the axes (x, y or z) and record the value of x, y and z on the teach pendent or ursim and sum their squares _(max_dsq = x^2 + y^2 + z^2)_ as show in fig[A]. <br />
 Set feature as shown in the figure to Base before reading any values for configuration. <br />
-Also, to prevent the robot from colliding with itself, we create an imaginary cylinder define by a circle as show in fig[B]. Move the robot to the minimun reach and record the value of x and y and sum the their squares (min_dsq = x^2 + y^2). <br />
+Also, to prevent the robot from colliding with itself, we create an imaginary cylinder define by a circle as show in fig[B]. Move the robot to the minimun reach and record the value of x and y and sum the their squares _(min_dsq = x^2 + y^2)_. <br />
 All values are in meters. <br />
-Set displacement_sq = [min_sq, max_sq] in the robot_config.yaml file.
+Set _displacement_sq = [min_sq, max_sq]_ in the robot_config.yaml file.
 
 * Mount surface <br />
-From figure the below, our assumption for the the mount surface is rectangular surface. we define the surface as mount_surf = [x_min, x_max, y_min, y_max] (see fig[D]). Also, take note of the collision with the mount surface (see fig[C]) mount_surf = [x_min, x_max, y_min, y_max, z_min]. <br />
-Not every mounting surface of the robot base is large enough for consideration, so default mount_surf = [0, 0, 0, 0, 0]. <br /> <br />
+From figure the below, our assumption for the the mount surface is rectangular surface. we define the surface as _mount_surf = [x_min, x_max, y_min, y_max]_ (see fig[D]). Also, take note of the collision with the mount surface (see fig[C]) _mount_surf = [x_min, x_max, y_min, y_max, z_min]_. <br />
+Not every mounting surface of the robot base is large enough for consideration, so default _mount_surf = [0, 0, 0, 0, 0]_. <br /> <br />
 ![safety config steps](https://github.com/sadichel/URJoystickControl/blob/f7052178ef5a7b8d073cd8600b8311b130b951e9/img/robot_config_steps.png?raw=true) 
 
 * Base length <br />
-Base length is a important parameter in the robot_config.yaml file for center correction. [See this for reference](https://www.universal-robots.com/media/1803022/5ework.png?width=704&height=731). For UR3 and UR5, we have base length of 152mm and 163mm respectively(UR3: base_length = 0.152).
+Base length is a important parameter in the robot_config.yaml file for center correction. [See this for reference](https://www.universal-robots.com/media/1803022/5ework.png?width=704&height=731). For UR3 and UR5, we have base length of 152mm and 163mm respectively (UR3: _base_length = 0.152_).
 
 ## 3. Controlling Robot
 * Joystick control mapping <br /> <br />
