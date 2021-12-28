@@ -1,6 +1,6 @@
 
 """
-Standard controller mappings.
+Standard gamepad controller mappings.
 
 """
 
