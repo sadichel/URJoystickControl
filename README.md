@@ -44,7 +44,7 @@ All values are in meters. <br />
 Set displacement_sq = [min_sq, max_sq] in the robot_config.yaml file.
 
 * Mount surface <br />
-From figure the below, our assumption for the the mount surface is rectangular surface. we define the surface as mount_face = [x_min, x_max, y_min, y_max] (see fig[D]). Also, take note of the collision with the mount surface (see fig[C]) mount_face = [x_min, x_max, y_min, y_max, z_min]. <br />
+From figure the below, our assumption for the the mount surface is rectangular surface. we define the surface as mount_face = [x_min, x_max, y_min, y_max] (see fig[D]). Also, take note of the collision with the mount surface (see fig[C]) mount_surf = [x_min, x_max, y_min, y_max, z_min]. <br />
 Not every mounting surface of the robot base is large enough for consideration, so default mount_surf = [0, 0, 0, 0, 0]. <br /> <br />
 ![safety config steps](https://github.com/sadichel/URJoystickControl/blob/f7052178ef5a7b8d073cd8600b8311b130b951e9/img/robot_config_steps.png?raw=true) 
 
