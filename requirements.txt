@@ -1,3 +1,2 @@
 pygame
-numpy 
-ur-rtde==1.4.7
+ur-rtde

@@ -1,30 +1,31 @@
 
+from numpy.lib.financial import rate
 import yaml
 from transforms import rpy2rv, rv2rpy
+import os
 
 # Extract robot configuration from the config file
 with open('robot_config.yaml') as file:
     cfg = yaml.load(file, Loader=yaml.FullLoader)
-    setup = cfg['setup']
+    use_safety = cfg['use_safety']
     displacement_sq = cfg['displacement_sq']
     mount_surf = cfg['mount_surf']
     base_length = cfg['base_length']
 
 
 class AnalogStickHandler:
-    def __init__(self, delta, offset=0, axis_config=['-X', '+Y', '+X', '-Y']):
+    def __init__(self, delta=0, offset=0, axis=['-X', '+Y', '+X', '-Y']):
         self.delta = delta
         self.offset = offset
-        self.axis = axis_config
-        self.default_axis = axis_config
+        self.axis = axis
+        self.default_axis = axis
 
     def rotate_axis(self, rotation='clockwise'):
         # Rotate axis config
-        # clockwise eg. ['-X', '+Y', '+X', '-Y'] -> ['-Y', '-X', '+Y', '+X']
-        # anticlockwise eg. ['-X', '+Y', '+X', '-Y'] -> ['+Y', '+X', '-Y', '-X']
+        # clockwise --> ['-X', '+Y', '+X', '-Y'] -> ['-Y', '-X', '+Y', '+X']
         if rotation == 'clockwise':
             self.axis = [self.axis[-1], *self.axis[0:3]]
-        elif rotation == 'anticlockwise':
+        if rotation == 'anticlockwise':
             self.axis = [*self.axis[1:4], self.axis[0]]
 
     def reset_axis(self):
@@ -53,7 +54,7 @@ class JoystickHandler:
 
 
 def limit_tcp(vector, idx, delta, cfg=[displacement_sq, mount_surf, base_length]):
-    if not setup: return True
+    if not use_safety: return True
     # Maximum reach: (eq: d^2 = x^2 + y^2 + z^2) equation of a sphere with radius
     # equals to the maximum displacement of robob tcp.
     # Minimun reach: (eq: d^2 = x^2 + y^2) equation of a circle discribing the
@@ -76,7 +77,7 @@ def limit_tcp(vector, idx, delta, cfg=[displacement_sq, mount_surf, base_length]
 
     #  Robot mount surface boundaries (rectangle)
     # [x_min, x_max, y_min, y_max, z_min, _] ->
-    (x_min, x_max, y_min, y_max, z_min, _) = mount_surf
+    (x_min, x_max, y_min, y_max, z_min) = mount_surf
 
     # Check boundaries of the mount surface: collision
     x_bound = vector[0] >= x_min and vector[0] <= x_max
@@ -95,6 +96,7 @@ def limit_tcp(vector, idx, delta, cfg=[displacement_sq, mount_surf, base_length]
 
 
 def limit_joint(vector, idx, delta, max_rotation=6.25):
+    if not use_safety: return True
     # Absolute Rotation of robot joint not > max_rotation in radian.
     angle = vector[idx] + delta
     if abs(angle) <= max_rotation:
@@ -140,8 +142,23 @@ def change_robot_mode(receiver, mode='Cartesian'):
         return receiver.getActualQ()
 
 
-def config_logs():
-    ...
+def increament_move_steps(analogR, analogL,hat, rate, max_delta):
+    if not hat: return
+    
+    delta = analogR.delta + hat*rate
+    if  analogR.delta > delta or delta <= max_delta:
+        analogR.delta += hat*rate
+
+    delta = analogL.delta + hat*rate
+    if analogL.delta > delta or delta <= max_delta:
+        analogL.delta += hat*rate
+
+    os.system('cls||clear')
+
+    print(f'L Analogstick: {analogL.delta:.5f}\n\n{analogL}')
+    print(f'R Analogstick: {analogR.delta:.5f}\n\n{analogR}')
+
+
 
 
 def move_robot_command(joystick, controller, sticks, vector, F, noise=0.4):

@@ -1,5 +1,5 @@
 # Use configuration setup parameters or not 
-setup: False
+use_safety: False
 
 # The equation of the robot tcp is d^2 = x^2 + y^2 + z^2 where d is the 
 # maximum displacement of the robot tcp from the robot point of origin
@@ -10,11 +10,11 @@ displacement_sq: [0.05, 0.3]
 
 # xyz coordinate defining the boundaries of the rectangular surface 
 # where the robot is mounted with respect to the robot tcp point of origin
-# -> [x_min, x_max, y_min, y_max, z_min, z_max]
+# -> [x_min, x_max, y_min, y_max, z_min]
 
 # mount flag
 mount: True
-mount_surf: [-0.25, 0.25, -0.25, 0.25, 0.023, 0.023]
+mount_surf: [-0.25, 0.25, -0.25, 0.25, 0.023]
 
 # Robot base length
 base_length: 0.152 # UR3
