@@ -69,5 +69,5 @@ python joystick_control --robot_ip <robot_ip> --boundary_config <target_file>
 
 * default --boundary_config: points to **robot_boundary_config.yaml**
 
-* _**Warning:**_ use with ursim first before real robot for safety responds check.
+* <font color="red">_**Warning:**_</font> use with ursim first before real robot for safety responds check.
 
