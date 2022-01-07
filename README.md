@@ -63,7 +63,6 @@ Base length is a important parameter in the **robot_boundary_config.yaml** file 
 
 ```
 python joystick_control --robot_ip <robot_ip> --boundary_config <target_file>
-
 ```
 * default robot_ip: localhost
 
