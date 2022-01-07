@@ -27,7 +27,7 @@ pip install numpy
 
 ## 2. Safety Configuration
 
-The satefy configuration is not a requirement to run the program but for safety, we provide some safety setup. The default config settings is set to false. All parameters are specified in robot_config.yaml file. 
+The satefy configuration is not a requirement to run the program but for safety, we provide some safety setup. The default config settings is set to false. All parameters are specified in **robot_boundary_config.yaml** file. 
 
 Controlling the robot using joystick is base on transforming the values of _[x, y, z, rx, ry, rz]_ and _[j0, j1, j2, j3, j4, j5]_ of the robot for motions linear in cartesian and joint space respectively.
 
@@ -41,7 +41,7 @@ Control the robot (cartesian) to the maximum reach in either of the axes (x, y o
 Set feature as shown in the figure to Base before reading any values for configuration. <br />
 Also, to prevent the robot from colliding with itself, we create an imaginary cylinder define by a circle as show in fig[B]. Move the robot to the minimun reach and record the value of x and y and sum the their squares _(min_dsq = x^2 + y^2)_. <br />
 All values are in meters. <br />
-Set _displacement_sq = [min_sq, max_sq]_ in the robot_config.yaml file.
+Set _displacement_sq = [min_sq, max_sq]_ in the **robot_boundary_config.yaml** file.
 
 * Mount surface <br />
 From figure the below, our assumption for the the mount surface is rectangular surface. we define the surface as _mount_surf = [x_min, x_max, y_min, y_max]_ (see fig[D]). Also, take note of the collision with the mount surface (see fig[C]) _mount_surf = [x_min, x_max, y_min, y_max, z_min]_. <br />
@@ -49,7 +49,7 @@ Not every mounting surface of the robot base is large enough for consideration, 
 ![safety config steps](https://github.com/sadichel/URJoystickControl/blob/f7052178ef5a7b8d073cd8600b8311b130b951e9/img/robot_config_steps.png?raw=true) 
 
 * Base length <br />
-Base length is a important parameter in the robot_config.yaml file for center correction. [See this for reference](https://www.universal-robots.com/media/1803022/5ework.png?width=704&height=731). For UR3 and UR5, we have base length of 152mm and 163mm respectively (UR3: _base_length = 0.152_).
+Base length is a important parameter in the **robot_boundary_config.yaml** file for center correction. [See this for reference](https://www.universal-robots.com/media/1803022/5ework.png?width=704&height=731). For UR3 and UR5, we have base length of 152mm and 163mm respectively (UR5: _base_length = 0.163_).
 
 ## 3. Controlling Robot
 * Joystick control mapping <br /> <br />
@@ -59,4 +59,12 @@ Base length is a important parameter in the robot_config.yaml file for center co
 * Default Orientation <br /> <br />
 ![Defaul Orientation](https://github.com/sadichel/URJoystickControl/blob/main/img/default_orientation.png?raw=true)
 
+## 4. Running
 
+```
+python joystick_control --robot_ip <robot_ip> --boundary_config <target_file>
+
+```
+* default robot_ip: localhost
+
+* default --boundary_config: points to **robot_boundary_config.yaml**
