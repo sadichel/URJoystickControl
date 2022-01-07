@@ -10,7 +10,7 @@ displacement_sq: [0.05, 0.3]
 # xyz coordinate defining the boundaries of the rectangular surface 
 # where the robot is mounted with respect to the robot tcp point of origin
 # -> [x_min, x_max, y_min, y_max, z_min]
-mount_surf: [-0.25, 0.25, -0.25, 0.25, 0.023]
+mount_surf: [0, 0, 0, 0, 0]
 
 # Robot base length h
-base_length: 0.152 # UR3
+base_length: 0.163 # UR5
