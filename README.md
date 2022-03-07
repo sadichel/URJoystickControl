@@ -11,7 +11,7 @@ pip install -r requirements.txt
 
 ### **RTDE**: &nbsp; Provides real-time data exchange with universal robot
 ```
-pip install ur_rtde
+pip install ur_rtde==1.4.7
 ```
 
 ### **Pygame**:&nbsp; Provides joystick driver

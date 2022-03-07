@@ -1,2 +1,2 @@
 pygame
-ur-rtde
+ur-rtde==1.4.7
